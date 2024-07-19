@@ -23,6 +23,19 @@ class SQL {
       }
     });
   }
+
+  do(query, callback) {
+    return new Promise((success, failure) => {
+      this.sql.query(query, (err, result) => {
+        if (err) {
+          failure(err);
+        } else {
+          success(result);
+        }
+      });
+    });
+  }
+  }
 }
 
 let test = new SQL({ host: "localhost", user: "root", password: "", database: "test", debug: 0 });
