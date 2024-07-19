@@ -1,0 +1,19 @@
+{
+  "name": "codisql",
+  "version": "1.0.0",
+  "description": "sql orm package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Codidodido/nodejs-sql.git"
+  },
+  "author": "codidodido",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Codidodido/nodejs-sql/issues"
+  },
+  "homepage": "https://github.com/Codidodido/nodejs-sql#readme"
+}
