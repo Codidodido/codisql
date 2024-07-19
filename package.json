@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Codidodido/nodejs-sql/issues"
   },
-  "homepage": "https://github.com/Codidodido/nodejs-sql#readme"
+  "homepage": "https://github.com/Codidodido/nodejs-sql#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
 }
