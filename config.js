@@ -1,4 +1,5 @@
 const mysql = require("mysql");
+const DataType = require("./dataType");
 
 class Schema {
   /**
@@ -57,6 +58,7 @@ class SQL {
       }
     });
     this.schema = new Schema(this);
+    this.dataType = DataType;
   }
 
   do(query, callback) {
