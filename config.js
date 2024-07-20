@@ -61,6 +61,22 @@ class SQL {
 
     return this.do(query);
   }
+
+  update(table, where, data) {
+    const whereClause = Object.entries(where)
+      .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+      .join(" AND ");
+
+    const setClause = Object.entries(data)
+      .map(([key, value]) => `${mysql.escapeId(key)} = ${mysql.escape(value)}`)
+      .join(", ");
+
+    const query = `UPDATE ${mysql.escapeId(
+      table
+    )} SET ${setClause} WHERE ${whereClause}`;
+
+    return this.do(query);
+  }
   }
 }
 
