@@ -9,6 +9,29 @@ class Schema {
     this.sql = sql;
     this.table = new Table(sql);
   }
+
+  /**
+   * @param {string} tableName
+   * @param {Array<{name: string, type: DataType, length?: number}>} columns
+   */
+  createTable(tableName, columns) {
+    let query = `CREATE TABLE IF NOT EXISTS ${mysql.escapeId(tableName)} (\n`;
+
+    const columnDefinitions = columns
+      .map((col) => {
+        let typePart = col.type.toUpperCase();
+        if (col.length) {
+          typePart += `(${col.length})`;
+        }
+        return `  ${mysql.escapeId(col.name)} ${typePart}`;
+      })
+      .join(",\n");
+
+    query += columnDefinitions + "\n);";
+
+    return this.sql.do(query);
+  }
+
   listTables() {
     const query = `SHOW TABLES`;
     return this.sql
