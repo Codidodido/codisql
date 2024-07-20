@@ -35,6 +35,17 @@ class SQL {
       });
     });
   }
+
+  find(table, where) {
+    let whereClause =
+      Object.keys(where).length > 0
+        ? Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(" AND ")
+        : "1"; // to avoid syntax error if there are no conditions
+    let query = `SELECT * FROM ${table} WHERE ${whereClause}`;
+    return this.do(query);
+  }
   }
 }
 
