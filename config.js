@@ -26,6 +26,12 @@ class Schema {
       .do(query)
       .then((result) => result.map((row) => row.COLUMN_NAME));
   }
+
+  columnInfo(table, column, info = []) {
+    const infoList = info.length > 0 ? info.join(",") : "*";
+    const query = `SELECT ${infoList} FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '${this.sql.database}' AND TABLE_NAME = '${table}' AND COLUMN_NAME = '${column}'`;
+    return this.sql.do(query);
+  }
 }
 
 class SQL {
