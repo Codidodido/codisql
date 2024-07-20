@@ -1,5 +1,15 @@
 const mysql = require("mysql");
 
+class Schema {
+  /**
+   * @param {SQL} sql
+   */
+  constructor(sql) {
+    this.sql = sql;
+    this.table = new Table(sql);
+  }
+}
+
 class SQL {
   constructor(dict) {
     this.host = dict["host"];
@@ -22,6 +32,7 @@ class SQL {
         }
       }
     });
+    this.schema = new Schema(this);
   }
 
   do(query, callback) {
