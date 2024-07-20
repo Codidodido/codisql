@@ -8,6 +8,11 @@ class Table {
   constructor(sql) {
     this.sql = sql;
   }
+
+  dropTable(table_name) {
+    const query = `DROP TABLE ${table_name}`;
+    return this.sql.do(query);
+  }
 }
 
 class Schema {
