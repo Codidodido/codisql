@@ -13,6 +13,26 @@ class Table {
     const query = `DROP TABLE ${table_name}`;
     return this.sql.do(query);
   }
+
+  /**
+   * @param {string} tableName
+   * @param {Array<{name: string, type: DataType, length?: number}>} columns
+   */
+  addColumn(tableName, columns) {
+    const query = columns
+      .map((col) => {
+        let typePart = col.type.toUpperCase();
+        if (col.length) {
+          typePart += `(${col.length})`;
+        }
+        return `ALTER TABLE ${mysql.escapeId(
+          tableName
+        )} ADD COLUMN ${mysql.escapeId(col.name)} ${typePart}`;
+      })
+      .join("; ");
+
+    return this.sql.do(query);
+  }
 }
 
 class Schema {
