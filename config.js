@@ -46,6 +46,21 @@ class SQL {
     let query = `SELECT * FROM ${table} WHERE ${whereClause}`;
     return this.do(query);
   }
+
+  insert(table, data) {
+    let keys = Object.keys(data)
+      .map((key) => mysql.escapeId(key))
+      .join(", ");
+    let values = Object.values(data)
+      .map((value) => mysql.escape(value))
+      .join(", ");
+
+    let query = `INSERT INTO ${mysql.escapeId(
+      table
+    )} (${keys}) VALUES (${values})`;
+
+    return this.do(query);
+  }
   }
 }
 
