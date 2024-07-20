@@ -8,6 +8,12 @@ class Schema {
     this.sql = sql;
     this.table = new Table(sql);
   }
+  listTables() {
+    const query = `SHOW TABLES`;
+    return this.sql
+      .do(query)
+      .then((result) => result.map((row) => row.Tables_in_test));
+  }
 }
 
 class SQL {
