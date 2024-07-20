@@ -14,6 +14,11 @@ class Schema {
       .do(query)
       .then((result) => result.map((row) => row.Tables_in_test));
   }
+
+  describeTable(table) {
+    const query = `DESCRIBE ${mysql.escapeId(table)}`;
+    return this.sql.do(query);
+  }
 }
 
 class SQL {
