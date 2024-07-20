@@ -19,6 +19,13 @@ class Schema {
     const query = `DESCRIBE ${mysql.escapeId(table)}`;
     return this.sql.do(query);
   }
+
+  listColumns(table) {
+    const query = `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '${this.sql.database}' AND TABLE_NAME = '${table}'`;
+    return this.sql
+      .do(query)
+      .then((result) => result.map((row) => row.COLUMN_NAME));
+  }
 }
 
 class SQL {
