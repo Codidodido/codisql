@@ -1,6 +1,15 @@
 const mysql = require("mysql");
 const DataType = require("./dataType");
 
+class Table {
+  /**
+   * @param {SQL} sql
+   */
+  constructor(sql) {
+    this.sql = sql;
+  }
+}
+
 class Schema {
   /**
    * @param {SQL} sql
