@@ -87,6 +87,19 @@ class SQL {
 
     return this.do(query);
   }
+
+  increment(table, where, column, value) {
+    return this.find(table, where).then((res) => {
+      res.forEach((obj) => {
+        const id = obj.id;
+        const old_value = obj[column];
+        const new_value = old_value + value;
+        this.update(table, { id: id }, { [column]: new_value }).catch((err) =>
+          console.log(err)
+        );
+      });
+    });
+  }
   }
 }
 
