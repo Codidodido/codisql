@@ -100,6 +100,18 @@ class SQL {
       });
     });
   }
+
+  count(table, where) {
+    let whereClause =
+      Object.keys(where).length > 0
+        ? Object.entries(where)
+            .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+            .join(" AND ")
+        : "1";
+    let query = `SELECT COUNT(*) as count FROM ${mysql.escapeId(
+      table
+    )} WHERE ${whereClause}`;
+    return this.do(query).then((result) => result[0].count);
   }
 }
 
