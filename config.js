@@ -16,7 +16,7 @@ class Table {
 
   /**
    * @param {string} tableName
-   * @param {Array<{name: string, type: DataType, length?: number}>} columns
+   * @param {Array<{name: string, type: DataType, length?: number, default?, primary?: boolean}>} columns
    */
   addColumn(tableName, columns) {
     const query = columns
@@ -25,9 +25,11 @@ class Table {
         if (col.length) {
           typePart += `(${col.length})`;
         }
-        return `ALTER TABLE ${mysql.escapeId(
-          tableName
-        )} ADD COLUMN ${mysql.escapeId(col.name)} ${typePart}`;
+
+        let defaultPart = col.default !== undefined ? ` DEFAULT ${mysql.escape(col.default)}` : '';
+        let primaryPart = col.primary ? ' PRIMARY KEY' : '';
+
+        return `ALTER TABLE ${mysql.escapeId(tableName)} ADD COLUMN ${mysql.escapeId(col.name)} ${typePart}${defaultPart}${primaryPart}`;
       })
       .join("; ");
 
@@ -46,7 +48,7 @@ class Schema {
 
   /**
    * @param {string} tableName
-   * @param {Array<{name: string, type: DataType, length?: number}>} columns
+   * @param {Array<{name: string, type: DataType, length?: number, default?, primary?: boolean}>} columns
    */
   createTable(tableName, columns) {
     let query = `CREATE TABLE IF NOT EXISTS ${mysql.escapeId(tableName)} (\n`;
@@ -56,6 +58,12 @@ class Schema {
         let typePart = col.type.toUpperCase();
         if (col.length) {
           typePart += `(${col.length})`;
+        }
+        if(col.default){
+            typePart += ` DEFAULT ${col.default} `;
+        }
+        if(col.primary){
+            typePart += ` AUTO_INCREMENT PRIMARY KEY `;
         }
         return `  ${mysql.escapeId(col.name)} ${typePart}`;
       })
