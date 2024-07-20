@@ -77,6 +77,16 @@ class SQL {
 
     return this.do(query);
   }
+
+  delete(table, where) {
+    const whereClause = Object.entries(where)
+      .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
+      .join(" AND ");
+
+    const query = `DELETE FROM ${mysql.escapeId(table)} WHERE ${whereClause}`;
+
+    return this.do(query);
+  }
   }
 }
 
