@@ -145,7 +145,7 @@ class SQL {
             .map(([key, value]) => `${key} = ${mysql.escape(value)}`)
             .join(" AND ")
         : "1"; // to avoid syntax error if there are no conditions
-    let query = `SELECT * FROM ${table} WHERE ${whereClause}`;
+    let query = `SELECT * FROM ${mysql.escapeId(table)} WHERE ${whereClause}`;
     return this.do(query);
   }
 
@@ -217,4 +217,4 @@ class SQL {
   }
 }
 
-let test = new SQL({ host: "localhost", user: "root", password: "", database: "test", debug: 0 });
+module.exports = SQL
