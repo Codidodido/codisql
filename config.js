@@ -101,6 +101,9 @@ class Schema {
 }
 
 class SQL {
+  /**
+   * @param {Array<{host: string, user: string, password: string, database: string, debug?: boolean}>} dict
+   */
   constructor(dict) {
     this.host = dict["host"];
     this.user = dict["user"];
