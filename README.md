@@ -1,25 +1,33 @@
-# NODE JS SQL Package
+# CodiSQL
+A Node.js package for simplified MySQL database interactions, including schema management, table operations, and data manipulation.
 
-## What is this ?
-This is a package for working with sql databases! It has some methods (which will increase in future) to help you connect with your database and operate your actions.
-
-## How to use ? 
-- Clone it to your project
+## Installation
+Install the package using npm:
 
 ```cmd
-git clone https://github.com/Codidodido/nodejs-sql.git
+npm i codisql
 ```
 
-- Require the config file and new it
-
+## Initialization
 ```js
-const SQL = require (path/config)
-const sql = new SQL({
-    host: 'YourHost',
-    user: 'YourUser',
-    password: 'YourPassword',
-    database: 'YourDatabase'
+const sql = require("codisql")
+sql.connect({
+host: 'YourHost',
+username: 'YourUsername',
+password: 'YourPassword',
+database: 'YourDatabase',
 })
 ```
 
-Use methods. It is easy to understand.
+## Documentation
+future ...
+
+## Example
+futureeee ...
+
+## Contributing
+Contributions are welcome! Open an issue or submit a pull request on GitHub.
+
+## Support
+If you have any questions or need help, feel free to open an issue on the GitHub repository.
+By the way you can find codidodido on [Telegram](https://t.me/codidodido)

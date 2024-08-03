@@ -1,8 +1,8 @@
 {
   "name": "codisql",
   "version": "1.0.0",
-  "description": "sql orm package",
-  "main": "index.js",
+  "description": "SQL ORM Package",
+  "main": "config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

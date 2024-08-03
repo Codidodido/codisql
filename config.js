@@ -26,13 +26,39 @@ class Table {
           typePart += `(${col.length})`;
         }
 
-        let defaultPart = col.default !== undefined ? ` DEFAULT ${mysql.escape(col.default)}` : '';
-        let primaryPart = col.primary ? ' PRIMARY KEY' : '';
+        let defaultPart =
+          col.default !== undefined
+            ? ` DEFAULT ${mysql.escape(col.default)}`
+            : "";
+        let primaryPart = col.primary ? " PRIMARY KEY" : "";
 
-        return `ALTER TABLE ${mysql.escapeId(tableName)} ADD COLUMN ${mysql.escapeId(col.name)} ${typePart}${defaultPart}${primaryPart}`;
+        return `ALTER TABLE ${mysql.escapeId(
+          tableName
+        )} ADD COLUMN ${mysql.escapeId(
+          col.name
+        )} ${typePart}${defaultPart}${primaryPart}`;
       })
       .join("; ");
 
+    return this.sql.do(query);
+  }
+
+  getSize(tableName) {
+    const query = `SELECT table_name AS "Table", ROUND(((data_length + index_length) / 1024 / 1024), 2) AS "Size (MB)" FROM information_schema.TABLES WHERE table_schema = ${mysql.escape(
+      this.sql.database
+    )} AND table_name = ${mysql.escape(tableName)}`;
+    return this.sql.do(query);
+  }
+
+  reset(tableName) {
+    const query = `TRUNCATE TABLE ${mysql.escapeId(tableName)}`;
+    return this.sql.do(query);
+  }
+
+  rename(table, newName) {
+    const query = `RENAME TABLE ${mysql.escapeId(table)} TO ${mysql.escapeId(
+      newName
+    )}`;
     return this.sql.do(query);
   }
 }
@@ -59,11 +85,11 @@ class Schema {
         if (col.length) {
           typePart += `(${col.length})`;
         }
-        if(col.default){
-            typePart += ` DEFAULT ${col.default} `;
+        if (col.default) {
+          typePart += ` DEFAULT ${col.default} `;
         }
-        if(col.primary){
-            typePart += ` AUTO_INCREMENT PRIMARY KEY `;
+        if (col.primary) {
+          typePart += ` AUTO_INCREMENT PRIMARY KEY `;
         }
         return `  ${mysql.escapeId(col.name)} ${typePart}`;
       })
@@ -98,21 +124,40 @@ class Schema {
     const query = `SELECT ${infoList} FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '${this.sql.database}' AND TABLE_NAME = '${table}' AND COLUMN_NAME = '${column}'`;
     return this.sql.do(query);
   }
+
+  deleteAllTables() {
+    return this.listTables().then((tables) => {
+      const dropPromises = tables.map((table) => this.table.dropTable(table));
+      return Promise.all(dropPromises);
+    });
+  }
 }
 
 class SQL {
+  constructor() {
+    this.host;
+    this.username;
+    this.password;
+    this.database;
+    this.debug;
+    this.sql;
+    this.schema = new Schema(this);
+    this.dataType = DataType;
+  }
+
   /**
-   * @param {Array<{host: string, user: string, password: string, database: string, debug?: boolean}>} dict
+   * @param {{host: string, username: string, password: string, database: string, debug?: boolean}} dict
    */
-  constructor(dict) {
+
+  connect(dict) {
     this.host = dict["host"];
-    this.user = dict["user"];
+    this.username = dict["username"];
     this.password = dict["password"];
     this.database = dict["database"];
     this.debug = dict["debug"];
     this.sql = mysql.createConnection({
       host: this.host,
-      user: this.user,
+      user: this.username,
       password: this.password,
       database: this.database,
     });
@@ -125,8 +170,6 @@ class SQL {
         }
       }
     });
-    this.schema = new Schema(this);
-    this.dataType = DataType;
   }
 
   do(query, callback) {
@@ -218,6 +261,18 @@ class SQL {
     )} WHERE ${whereClause}`;
     return this.do(query).then((result) => result[0].count);
   }
+
+  close() {
+    this.sql.end((err) => {
+      if (this.debug) {
+        if (err) {
+          console.error("Error closing the database connection: ", err);
+        } else {
+          console.log("Database connection closed.");
+        }
+      }
+    });
+  }
 }
 
-module.exports = SQL
+module.exports = new SQL();
