@@ -26,8 +26,8 @@ future ...
 futureeee ...
 
 ## Contributing
-Contributions are welcome! Open an issue or submit a pull request on GitHub.
+Contributions are welcome! Open an issue or submit a pull request on [GitHub](https://github.com/codidodido/codisql).
 
 ## Support
-If you have any questions or need help, feel free to open an issue on the GitHub repository.
+If you have any questions or need help, feel free to open an issue on [GitHub](https://github.com/codidodido/codisql).
 By the way you can find codidodido on [Telegram](https://t.me/codidodido)
